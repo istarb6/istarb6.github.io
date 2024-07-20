@@ -108,8 +108,8 @@
 </li>
 </ul>
 <p>每个GPIO端口可管辖所属16个引脚，被称为16位，而每一位可以被对应寄存器配置为8种模式中的一种。</p>
-<p><img src="/%5Cimg%5C%E7%AB%AF%E5%8F%A3%E4%BD%8D%E9%85%8D%E7%BD%AE%E8%A1%A8.png" alt="图片" title="端口位配置表"></p>
-<p><img src="/%5Cimg%5C%E7%AB%AF%E5%8F%A3%E4%BD%8D%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%9B%BE.png" alt="图片" title="端口位基本结构图"></p>
+<p><img src="/2024/07/19/STM32%E7%AC%94%E8%AE%B0-GPIO/%E7%AB%AF%E5%8F%A3%E4%BD%8D%E9%85%8D%E7%BD%AE%E8%A1%A8.png" alt="端口位配置表"></p>
+<p><img src="/2024/07/19/STM32%E7%AC%94%E8%AE%B0-GPIO/%E7%AB%AF%E5%8F%A3%E4%BD%8D%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84%E5%9B%BE.png" alt="端口位基本结构图"></p>
 <p>这是端口位的基本结构，根据不同的位模式这个结构会发生变化，从而产生特定的作用</p>
 <h4 id="数字输入"><a href="#数字输入" class="headerlink" title="数字输入"></a>数字输入</h4><p>读取的值为数字量，只能是0或1</p>
 <p>当配置为输入时：</p>
@@ -129,8 +129,8 @@
 <p>  对输入数据寄存器的读访问可得到输入量</p>
 </li>
 </ul>
-<p><img src="/%5Cimg%5C%E6%95%B0%E5%AD%97%E8%BE%93%E5%85%A5%E9%85%8D%E7%BD%AE.png" alt="图片" title="输入浮空/上拉/下拉配置"></p>
-<h4 id="模拟输入"><a href="#模拟输入" class="headerlink" title="模拟输入"></a>模拟输入</h4><p><img src="/%5Cimg%5C%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E9%85%8D%E7%BD%AE.png" alt="图片" title="高阻抗的模拟输入配置"></p>
+<p><img src="/2024/07/19/STM32%E7%AC%94%E8%AE%B0-GPIO/%E6%95%B0%E5%AD%97%E8%BE%93%E5%85%A5%E9%85%8D%E7%BD%AE.png" alt="输入浮空/上拉/下拉配置"></p>
+<h4 id="模拟输入"><a href="#模拟输入" class="headerlink" title="模拟输入"></a>模拟输入</h4><p><img src="/2024/07/19/STM32%E7%AC%94%E8%AE%B0-GPIO/%E6%A8%A1%E6%8B%9F%E8%BE%93%E5%85%A5%E9%85%8D%E7%BD%AE.png" alt="高阻抗的模拟输入配置"></p>
 <h4 id="通用输出"><a href="#通用输出" class="headerlink" title="通用输出"></a>通用输出</h4><p>写入的值为数字量，只能是0或1</p>
 <p>当I&#x2F;O端口被配置为输出时：</p>
 <ul>
@@ -148,8 +148,8 @@
 <p>  在推挽式模式时，对输出数据寄存器的读访问得到最后一次写的值</p>
 </li>
 </ul>
-<p><img src="/%5Cimg%5C%E9%80%9A%E7%94%A8%E8%BE%93%E5%87%BA%E9%85%8D%E7%BD%AE.png" alt="图片" title="通用输出配置"></p>
-<h4 id="复用输入输出"><a href="#复用输入输出" class="headerlink" title="复用输入输出"></a>复用输入输出</h4><p><img src="/%5Cimg%5C%E5%A4%8D%E7%94%A8%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E9%85%8D%E7%BD%AE.png" alt="图片" title="复用输入输出配置"></p>
+<p><img src="/2024/07/19/STM32%E7%AC%94%E8%AE%B0-GPIO/%E9%80%9A%E7%94%A8%E8%BE%93%E5%87%BA%E9%85%8D%E7%BD%AE.png" alt="通用输出配置"></p>
+<h4 id="复用输入输出"><a href="#复用输入输出" class="headerlink" title="复用输入输出"></a>复用输入输出</h4><p><img src="/2024/07/19/STM32%E7%AC%94%E8%AE%B0-GPIO/%E5%A4%8D%E7%94%A8%E8%BE%93%E5%85%A5%E8%BE%93%E5%87%BA%E9%85%8D%E7%BD%AE.png" alt="复用输入输出配置"></p>
 <h3 id="GPIO寄存器"><a href="#GPIO寄存器" class="headerlink" title="GPIO寄存器"></a>GPIO寄存器</h3><p>端口配置寄存器分为一高一低，CRL负责0到7引脚的配置，CRH负责8到15引脚的配置，这也说明每个引脚的配置需要4bit</p>
 <p>这4bit中低的2bit为CRL&#x2F;CRH的MODE位，高的2bit为CNF位</p>
 <p>CNF[1:0]： </p>
