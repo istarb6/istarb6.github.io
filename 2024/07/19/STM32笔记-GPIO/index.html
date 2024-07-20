@@ -6,15 +6,24 @@
   
   <title>STM32笔记-GPIO | istarb6</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta property="og:type" content="article">
+  <meta name="description" content="GPIO可以用来实现单片机所具备的最简单的功能，却也是我们以后实现其他复杂功能的必不可少基础。 GPIO依据挂载的时钟总线的不同，可分为不同的端口。 每个GPIO端口有：  两个32bit配置寄存器(GPIOx_CRL，GPIOx_CRH) 两个32位数据寄存器(GPIOx_IDR，GPIOx_ODR) 一个32位置位&#x2F;复位寄存器(GPIOx_BSRR) 一个16位复位寄存器(GPIOx">
+<meta property="og:type" content="article">
 <meta property="og:title" content="STM32笔记-GPIO">
 <meta property="og:url" content="http://example.com/2024/07/19/STM32%E7%AC%94%E8%AE%B0-GPIO/index.html">
 <meta property="og:site_name" content="istarb6">
+<meta property="og:description" content="GPIO可以用来实现单片机所具备的最简单的功能，却也是我们以后实现其他复杂功能的必不可少基础。 GPIO依据挂载的时钟总线的不同，可分为不同的端口。 每个GPIO端口有：  两个32bit配置寄存器(GPIOx_CRL，GPIOx_CRH) 两个32位数据寄存器(GPIOx_IDR，GPIOx_ODR) 一个32位置位&#x2F;复位寄存器(GPIOx_BSRR) 一个16位复位寄存器(GPIOx">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://example.com/image-2.png">
+<meta property="og:image" content="http://example.com/image-3.png">
+<meta property="og:image" content="http://example.com/image-4.png">
+<meta property="og:image" content="http://example.com/image-7.png">
+<meta property="og:image" content="http://example.com/image-5.png">
+<meta property="og:image" content="http://example.com/image-6.png">
 <meta property="article:published_time" content="2024-07-19T06:15:38.000Z">
-<meta property="article:modified_time" content="2024-07-19T06:15:38.400Z">
+<meta property="article:modified_time" content="2024-07-20T03:33:40.538Z">
 <meta property="article:author" content="sw">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/image-2.png">
   
     <link rel="alternate" href="/atom.xml" title="istarb6" type="application/atom+xml">
   
@@ -91,7 +100,86 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        
+        <p>GPIO可以用来实现单片机所具备的最简单的功能，却也是我们以后实现其他复杂功能的必不可少基础。</p>
+<p>GPIO依据挂载的时钟总线的不同，可分为不同的端口。</p>
+<p>每个GPIO端口有：</p>
+<ol>
+<li>两个32bit配置寄存器(GPIOx_CRL，GPIOx_CRH)</li>
+<li>两个32位数据寄存器(GPIOx_IDR，GPIOx_ODR)</li>
+<li>一个32位置位&#x2F;复位寄存器(GPIOx_BSRR)</li>
+<li>一个16位复位寄存器(GPIOx_BRR)</li>
+<li>一个32位锁定寄存器(GPIOx_LCKR)</li>
+</ol>
+<ul>
+<li><p>寄存器</p>
+<p>  在单片机中，数据存放的地点可以分为两种：内存和寄存器</p>
+<p>  寄存器也像内存那样被分配了地址，且寄存器的访问速度更快</p>
+</li>
+</ul>
+<p>每个GPIO端口可管辖所属16个引脚，被称为16位，而每一位可以被对应寄存器配置为8种模式中的一种。</p>
+<p><img src="/image-2.png" alt="端口位配置表"></p>
+<p><img src="/image-3.png" alt="I/O端口位的基本结构"><br>这是端口位的基本结构，根据不同的位模式这个结构会发生变化，从而产生特定的作用</p>
+<h4 id="数字输入"><a href="#数字输入" class="headerlink" title="数字输入"></a>数字输入</h4><p>读取的值为数字量，只能是0或1</p>
+<p>当配置为输入时：</p>
+<ul>
+<li><p>输出缓冲器被禁止</p>
+<p>  所以端口位基本结构的下半部分被剔除</p>
+</li>
+<li><p>根据输入配置(上拉，下拉或浮空)的不同，弱上拉和下拉电阻被连接</p>
+<p>  当电路的输入端未连接到任何信号源时，它们可能会因为寄生电容或外部噪声而产生不稳定的电平。弱上拉或弱下拉电阻可以防止这种情况，确保输入端稳定。</p>
+<p>  一般在浮空输入的模式下，引脚需要接外部电阻，这样的做法可以用来达到高于内部电阻的阻抗要求</p>
+</li>
+<li><p>施密特触发输入被激活</p>
+<p>  这个是指用肖特基管构成的施密特触发器，用于将模拟量转为数字量</p>
+<p>  施密特触发器具有两个不同的阈值电压：正向阈值电压（V+）和负向阈值电压（V-）。当输入信号超过V+时，输出变为高电平；当输入信号低于V-时，输出变为低电平。</p>
+</li>
+<li><p>引脚在每个总线时钟来临时采样输入点平到输入数据寄存器</p>
+<p>  对输入数据寄存器的读访问可得到输入量</p>
+</li>
+</ul>
+<p><img src="/image-4.png" alt="输入浮空/上拉/下拉配置"></p>
+<h4 id="模拟输入"><a href="#模拟输入" class="headerlink" title="模拟输入"></a>模拟输入</h4><p><img src="/image-7.png" alt="高阻抗的模拟输入配置"></p>
+<h4 id="通用输出"><a href="#通用输出" class="headerlink" title="通用输出"></a>通用输出</h4><p>写入的值为数字量，只能是0或1</p>
+<p>当I&#x2F;O端口被配置为输出时：</p>
+<ul>
+<li><p>输出缓冲器被激活</p>
+</li>
+<li><p>推挽模式：写入0激活N-MOS，写入1激活P-MOS</p>
+</li>
+<li><p>开漏模式：写入0激活N-MOS，写入1将端口置于高阻状态(P-MOS从不被激活) </p>
+<p>  这种模式一般要外接上拉电阻，可以增强引脚的驱动能力</p>
+</li>
+<li><p>施密特触发输入被激活</p>
+<p>  这意味着输入仍然有效？确实如此</p>
+<p>  引脚仍然会在每个总线时钟来临时采样输入点平到输入数据寄存器，但此时弱上拉和下拉电阻被禁止</p>
+<p>  在开漏模式时，对输入数据寄存器的读访问可得到I&#x2F;O状态</p>
+<p>  在推挽式模式时，对输出数据寄存器的读访问得到最后一次写的值</p>
+</li>
+</ul>
+<p><img src="/image-5.png" alt="输出配置"></p>
+<h4 id="复用输入输出"><a href="#复用输入输出" class="headerlink" title="复用输入输出"></a>复用输入输出</h4><p><img src="/image-6.png" alt="复用功能配置"></p>
+<h3 id="GPIO寄存器"><a href="#GPIO寄存器" class="headerlink" title="GPIO寄存器"></a>GPIO寄存器</h3><p>端口配置寄存器分为一高一低，CRL负责0到7引脚的配置，CRH负责8到15引脚的配置，这也说明每个引脚的配置需要4bit</p>
+<p>这4bit中低的2bit为CRL&#x2F;CRH的MODE位，高的2bit为CNF位</p>
+<p>CNF[1:0]： </p>
+<p>在输入模式(MODE[1:0]&#x3D;00)： </p>
+<pre><code>00：模拟输入模式 
+01：浮空输入模式(复位后的状态) 
+10 上拉/下拉输入模式  
+11：保留 
+</code></pre>
+<p>在输出模式(MODE[1:0]&gt;00)： </p>
+<pre><code>00：通用推挽输出模式 
+01：通用开漏输出模式 
+10：复用功能推挽输出模式 
+11：复用功能开漏输出模式 
+</code></pre>
+<p>MODE[1:0]： </p>
+<pre><code>00：输入模式(复位后的状态) 
+01：输出模式，最大速度10MHz 
+10：输出模式，最大速度2MHz 
+11：输出模式，最大速度50MHz 
+</code></pre>
+
       
     </div>
     <footer class="article-footer">
